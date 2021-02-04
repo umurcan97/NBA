@@ -190,6 +190,19 @@ namespace NBA.Api.Entities
                 QuarterExists = false;
             return QuarterExists;
         }
+        public bool DoesQuarterExist(int GameNo)
+        {
+            bool QuarterExists = true;
+            FullSeasonQuarters game = _dbContext.FullSeasonQuarters.FirstOrDefault(x => x.GameNo == GameNo);
+            if (game == null)
+                QuarterExists = false;
+            return QuarterExists;
+        }
+        public bool DoesPlayerStatGameExist(int GameNo)
+        {
+            List<PlayerStats> stats = this._dbContext.PlayerStats.Where(x => x.GameNo == GameNo).ToList();
+            return stats.Count != 0;
+        }
         public void DeleteGame(int GameNo)
         {
             List<FullSeason> game = _dbContext.FullSeason.Where(x => x.GameNo == GameNo).ToList();
@@ -2174,6 +2187,12 @@ namespace NBA.Api.Entities
                 players.Add(player);
             }
             return players;
+        }
+        public List<GameTime> GetListOfGamesPlayed()
+        {
+            DateTime date = DateTime.Now.AddHours(-8);
+            List<GameTime> games = this._dbContext.GameTime.Where(x => x.GameDate < date).OrderBy(z=>z.GameDate).ToList();
+            return games;
         }
     }
 }

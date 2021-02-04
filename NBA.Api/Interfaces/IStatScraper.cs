@@ -13,6 +13,8 @@ namespace NBA.Api.Interfaces
         Team GetTeamEnumByTeamMascotName(string TeamMascotName);
         bool DoesGameExist(int GameNo);
         bool DoesQuarterExist(int GameNo, int QuarterNo);
+        bool DoesQuarterExist(int GameNo);
+        bool DoesPlayerStatGameExist(int GameNo);
         void DeleteGame(int GameNo);
         void DeleteQuarter(int GameNo, int QuarterNo);
         void AddStatList(List<FullSeason> Stats);
@@ -34,5 +36,6 @@ namespace NBA.Api.Interfaces
         FullSeasonQuarters19_20 QuarterScraper1920(ChromeDriver driver, int GameNo, int QuarterNo);
         List<PlayerStats> PlayerStatScraper(ChromeDriver driver, int GameNo, string url);
         List<Players> PlayerInfoScraper(ChromeDriver driver, int No1, int No2);
+        List<GameTime> GetListOfGamesPlayed();
     }
 }
