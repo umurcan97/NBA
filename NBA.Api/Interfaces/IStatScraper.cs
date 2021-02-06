@@ -15,6 +15,8 @@ namespace NBA.Api.Interfaces
         bool DoesQuarterExist(int GameNo, int QuarterNo);
         bool DoesQuarterExist(int GameNo);
         bool DoesPlayerStatGameExist(int GameNo);
+        bool DoesGamePredictionExist(int GameNo);
+        bool DoesQuarterPredictionExist(int GameNo);
         void DeleteGame(int GameNo);
         void DeleteQuarter(int GameNo, int QuarterNo);
         void AddStatList(List<FullSeason> Stats);
@@ -30,12 +32,13 @@ namespace NBA.Api.Interfaces
         void AddGameTime(GameTime date);
         DateTime DateTimeConverter(string date);
         GameTime DateScraper(ChromeDriver driver, int GameNo, string url);
-        FullSeason GameScraper(ChromeDriver driver, int GameNo, string url);
+        FullSeason GameScraper(ChromeDriver driver, int GameNo);
         FullSeason19_20 GameScraper1920(ChromeDriver driver, int GameNo, string url);
         FullSeasonQuarters QuarterScraper(ChromeDriver driver, int GameNo, int QuarterNo);
         FullSeasonQuarters19_20 QuarterScraper1920(ChromeDriver driver, int GameNo, int QuarterNo);
-        List<PlayerStats> PlayerStatScraper(ChromeDriver driver, int GameNo, string url);
+        List<PlayerStats> PlayerStatScraper(ChromeDriver driver, int GameNo);
         List<Players> PlayerInfoScraper(ChromeDriver driver, int No1, int No2);
         List<GameTime> GetListOfGamesPlayed();
+        List<GameTime> GetListOfGamesToBePlayed();
     }
 }

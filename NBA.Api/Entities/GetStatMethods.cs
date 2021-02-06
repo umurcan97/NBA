@@ -75,7 +75,7 @@ namespace NBA.Api.Entities
         {
             try
             {
-                QuarterPredictions quarter = this._dbContext.Predictions.OrderByDescending(x => x.ID).First();
+                QuarterPredictions quarter = this._dbContext.QuarterPredictions.OrderByDescending(x => x.ID).First();
                 return quarter.GameNo;
             }
             catch (Exception)
@@ -87,7 +87,7 @@ namespace NBA.Api.Entities
         {
             try
             {
-                QuarterPredictions quarter = this._dbContext.Predictions.OrderByDescending(x => x.ID).First();
+                QuarterPredictions quarter = this._dbContext.QuarterPredictions.OrderByDescending(x => x.ID).First();
                 return quarter.QuarterNo;
             }
             catch (Exception)

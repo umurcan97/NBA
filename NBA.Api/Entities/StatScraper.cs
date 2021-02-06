@@ -203,6 +203,22 @@ namespace NBA.Api.Entities
             List<PlayerStats> stats = this._dbContext.PlayerStats.Where(x => x.GameNo == GameNo).ToList();
             return stats.Count != 0;
         }
+        public bool DoesGamePredictionExist(int GameNo)
+        {
+            bool GameExists = true;
+            GamePredictions game = _dbContext.GamePredictions.FirstOrDefault(x => x.GameNo == GameNo);
+            if (game == null)
+                GameExists = false;
+            return GameExists;
+        }
+        public bool DoesQuarterPredictionExist(int GameNo)
+        {
+            bool QuarterExists = true;
+            QuarterPredictions game = _dbContext.QuarterPredictions.FirstOrDefault(x => x.GameNo == GameNo);
+            if (game == null)
+                QuarterExists = false;
+            return QuarterExists;
+        }
         public void DeleteGame(int GameNo)
         {
             List<FullSeason> game = _dbContext.FullSeason.Where(x => x.GameNo == GameNo).ToList();
@@ -248,7 +264,7 @@ namespace NBA.Api.Entities
         }
         public void AddQuarterPrediction(QuarterPredictions Quarter)
         {
-            _dbContext.Predictions.Add(Quarter);
+            _dbContext.QuarterPredictions.Add(Quarter);
             _unitOfWork.Commit();
         }
         public void AddGamePrediction(GamePredictions game)
@@ -381,9 +397,8 @@ namespace NBA.Api.Entities
             game.GameNo = GameNo;
             return game;
         }
-        public FullSeason GameScraper(ChromeDriver driver, int GameNo, string url)
+        public FullSeason GameScraper(ChromeDriver driver, int GameNo)
         {
-            driver.Navigate().GoToUrl(url);
             FullSeason stat = new FullSeason();
             string AwayPITP =
                 "/html/body/div[1]/div[2]/div[4]/section[1]/div/div/table[2]/tbody/tr[1]/td[1]";
@@ -1763,9 +1778,8 @@ namespace NBA.Api.Entities
             stat.AwayPoints = stat.AwayFGM * 2 + stat.Away3PM + stat.AwayFTM;
             return stat;
         }
-        public List<PlayerStats> PlayerStatScraper(ChromeDriver driver, int GameNo, string url)
+        public List<PlayerStats> PlayerStatScraper(ChromeDriver driver, int GameNo)
         {
-            driver.Navigate().GoToUrl(url);
             Thread.Sleep(1500);
             string AwayTeam =
                 "/html/body/div[1]/div[2]/div[4]/section[2]/div[1]/h1/span";
@@ -2192,6 +2206,13 @@ namespace NBA.Api.Entities
         {
             DateTime date = DateTime.Now.AddHours(-8);
             List<GameTime> games = this._dbContext.GameTime.Where(x => x.GameDate < date).OrderBy(z=>z.GameDate).ToList();
+            return games;
+        }
+        public List<GameTime> GetListOfGamesToBePlayed()
+        {
+            DateTime date = DateTime.Now.AddHours(-8);
+            DateTime date2 = DateTime.Now.AddHours(16);
+            List<GameTime> games = this._dbContext.GameTime.Where(x => x.GameDate > date && x.GameDate < date2).OrderBy(z => z.GameDate).ToList();
             return games;
         }
     }

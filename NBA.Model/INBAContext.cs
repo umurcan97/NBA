@@ -5,7 +5,7 @@
     {
         IDbSet<FullSeason> FullSeason { get; set; }
         IDbSet<FullSeasonQuarters> FullSeasonQuarters { get; set; }
-        IDbSet<QuarterPredictions> Predictions { get; set; }
+        IDbSet<QuarterPredictions> QuarterPredictions { get; set; }
         IDbSet<GamePredictions> GamePredictions { get; set; }
         IDbSet<PlayerPredictions> PlayerPredictions { get; set; }
         IDbSet<Teams> Teams { get; set; }

@@ -13,7 +13,7 @@
         }
         public IDbSet<FullSeason> FullSeason { get; set; }
         public IDbSet<FullSeasonQuarters> FullSeasonQuarters { get; set; }
-        public IDbSet<QuarterPredictions> Predictions { get; set; }
+        public IDbSet<QuarterPredictions> QuarterPredictions { get; set; }
         public IDbSet<GamePredictions> GamePredictions { get; set; }
         public IDbSet<PlayerPredictions> PlayerPredictions { get; set; }
         public IDbSet<Teams> Teams { get; set; }
