@@ -9,7 +9,7 @@ namespace NBA.Api.Interfaces
     public interface IPredictor
     {
         void PredictQuarter(int QuarterNo, int GameNo);
-        void CoefficientOptimizerGame();
-        void CoefficientOptimizerQuarter();
+        void CoefficientOptimizerGame(int No);
+        void CoefficientOptimizerQuarter(int No);
     }
 }

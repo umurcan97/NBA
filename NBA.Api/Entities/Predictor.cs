@@ -37,26 +37,32 @@ namespace NBA.Api.Entities
             _statscraper.AddQuarterPrediction(Quarter);
         }
 
-        public void CoefficientOptimizerGame()
+        public void CoefficientOptimizerGame(int No)
         {
             int firstgames = 0;
             int othergames = 0;
-            double Coefficient1 , Coefficient2 , Coefficient3 , Coefficient4 , Coefficient5 , Coefficient6 , Coefficient7 ;
+            double Coefficient1, Coefficient2, Coefficient3, Coefficient4, Coefficient5, Coefficient6, Coefficient7;
             CoEfficientOptimizer optimizer = new CoEfficientOptimizer();
-            Random r = new Random();
-            Coefficient1 = r.Next(8) + 2;
-            Coefficient2 = r.Next(8) + 2;
-            Coefficient3 = r.Next(8) + 2;
-            Coefficient4 = r.Next(8) + 2;
+            Coefficient1 = Math.Floor((double)(No / 729));
+            Coefficient2 = Math.Floor((No - Coefficient1 * 729) / 81);
+            Coefficient3 = Math.Floor((No - Coefficient1 * 729 - Coefficient2 * 81) / 9);
+            Coefficient4 = Math.Floor(No - Coefficient1 * 729 - Coefficient2 * 81 - Coefficient3 * 9);
+            Coefficient1++;
+            Coefficient2++;
+            Coefficient3++;
+            Coefficient4++;
             double total = Coefficient1 + Coefficient2 + Coefficient3 + Coefficient4;
             Coefficient1 = total / Coefficient1;
             Coefficient2 = total / Coefficient2;
             Coefficient3 = total / Coefficient3;
             Coefficient4 = total / Coefficient4;
 
-            Coefficient5 = r.Next(8) + 2;
-            Coefficient6 = r.Next(8) + 2;
-            Coefficient7 = r.Next(8) + 2;
+            Coefficient5 = Math.Floor((double)((No % 729) / 81));
+            Coefficient6 = Math.Floor((No % 729 - Coefficient5 * 81) / 9);
+            Coefficient7 = Math.Floor(No % 729 - Coefficient5 * 81 - Coefficient6 * 9);
+            Coefficient5++;
+            Coefficient6++;
+            Coefficient7++;
             total = Coefficient5 + Coefficient6 + Coefficient7;
             Coefficient5 = total / Coefficient5;
             Coefficient6 = total / Coefficient6;
@@ -68,7 +74,7 @@ namespace NBA.Api.Entities
             optimizer.Coefficient5 = Coefficient5;
             optimizer.Coefficient6 = Coefficient6;
             optimizer.Coefficient7 = Coefficient7;
-            for (int i = 300; i < 971; i++)
+            for (int i = 750; i < 971; i++)
             {
                 if (i == 707)
                 {
@@ -175,26 +181,32 @@ namespace NBA.Api.Entities
             this._unitOfWork.Commit();
         }
 
-        public void CoefficientOptimizerQuarter()
+        public void CoefficientOptimizerQuarter(int No)
         {
             int firstgames = 0;
             int othergames = 0;
             double Coefficient1, Coefficient2, Coefficient3, Coefficient4, Coefficient5, Coefficient6, Coefficient7;
             CoEfficientOptimizer optimizer = new CoEfficientOptimizer();
-            Random r = new Random();
-            Coefficient1 = r.Next(8) + 2;
-            Coefficient2 = r.Next(8) + 2;
-            Coefficient3 = r.Next(8) + 2;
-            Coefficient4 = r.Next(8) + 2;
+            Coefficient1 = Math.Floor((double)(No / 729));
+            Coefficient2 = Math.Floor((No - Coefficient1 * 729) / 81);
+            Coefficient3 = Math.Floor((No - Coefficient1 * 729 - Coefficient2 * 81) / 9);
+            Coefficient4 = Math.Floor(No - Coefficient1 * 729 - Coefficient2 * 81 - Coefficient3 * 9);
+            Coefficient1++;
+            Coefficient2++;
+            Coefficient3++;
+            Coefficient4++;
             double total = Coefficient1 + Coefficient2 + Coefficient3 + Coefficient4;
             Coefficient1 = total / Coefficient1;
             Coefficient2 = total / Coefficient2;
             Coefficient3 = total / Coefficient3;
             Coefficient4 = total / Coefficient4;
 
-            Coefficient5 = r.Next(8) + 2;
-            Coefficient6 = r.Next(8) + 2;
-            Coefficient7 = r.Next(8) + 2;
+            Coefficient5 = Math.Floor((double)(No % 729 / 81));
+            Coefficient6 = Math.Floor((No % 729 - Coefficient5 * 81) / 9);
+            Coefficient7 = Math.Floor(No % 729 - Coefficient5 * 81 - Coefficient6 * 9);
+            Coefficient5++;
+            Coefficient6++;
+            Coefficient7++;
             total = Coefficient5 + Coefficient6 + Coefficient7;
             Coefficient5 = total / Coefficient5;
             Coefficient6 = total / Coefficient6;
@@ -206,7 +218,7 @@ namespace NBA.Api.Entities
             optimizer.Coefficient5 = Coefficient5;
             optimizer.Coefficient6 = Coefficient6;
             optimizer.Coefficient7 = Coefficient7;
-            for (int i = 650; i < 971; i++)
+            for (int i = 750; i < 971; i++)
             {
                 if (i == 707)
                 {
@@ -218,6 +230,12 @@ namespace NBA.Api.Entities
                 {
                     QuarterPredictions prediction = _simulator.QuarterSimulator1920(homeTeam, awayTeam, j, i, Coefficient1, Coefficient2, Coefficient3, Coefficient4, Coefficient5, Coefficient6, Coefficient7);
                     FullSeasonQuarters19_20 game = _getStatMethods.GetFullSeasonQuarters1920(i, j);
+                    if (game.HomePoints == prediction.HomePoints && game.AwayPoints == prediction.AwayPoints)
+                    {
+                        if(prediction.FirstGame)
+                            optimizer.TotalHomePoints++;
+                        optimizer.TotalAwayPoints++;
+                    }
                     if (prediction.FirstGame)
                     {
                         firstgames++;
@@ -379,20 +397,20 @@ namespace NBA.Api.Entities
                         {
                             optimizer.AwayFTM += Math.Abs(game.AwayFTM - prediction.AwayFTM) / game.AwayFTM * 100;
                         }
-                        optimizer.TotalHomePoints += Convert.ToInt16(prediction.HomePoints);
-                        optimizer.TotalHome3PA += Convert.ToInt16(prediction.Home3PA);
-                        optimizer.TotalHome3PM += Convert.ToInt16(prediction.Home3PM);
-                        optimizer.TotalHomeFGA += Convert.ToInt16(prediction.HomeFGA);
-                        optimizer.TotalHomeFGM += Convert.ToInt16(prediction.HomeFGM);
-                        optimizer.TotalHomeFTA += Convert.ToInt16(prediction.HomeFTA);
-                        optimizer.TotalHomeFTM += Convert.ToInt16(prediction.HomeFTM);
-                        optimizer.TotalAwayPoints += Convert.ToInt16(prediction.AwayPoints);
-                        optimizer.TotalAway3PA += Convert.ToInt16(prediction.Away3PA);
-                        optimizer.TotalAway3PM += Convert.ToInt16(prediction.Away3PM);
-                        optimizer.TotalAwayFGA += Convert.ToInt16(prediction.AwayFGA);
-                        optimizer.TotalAwayFGM += Convert.ToInt16(prediction.AwayFGM);
-                        optimizer.TotalAwayFTA += Convert.ToInt16(prediction.AwayFTA);
-                        optimizer.TotalAwayFTM += Convert.ToInt16(prediction.AwayFTM);
+                        optimizer.FirstTotalHomePoints += Convert.ToInt16(prediction.HomePoints);
+                        optimizer.FirstTotalHome3PA += Convert.ToInt16(prediction.Home3PA);
+                        optimizer.FirstTotalHome3PM += Convert.ToInt16(prediction.Home3PM);
+                        optimizer.FirstTotalHomeFGA += Convert.ToInt16(prediction.HomeFGA);
+                        optimizer.FirstTotalHomeFGM += Convert.ToInt16(prediction.HomeFGM);
+                        optimizer.FirstTotalHomeFTA += Convert.ToInt16(prediction.HomeFTA);
+                        optimizer.FirstTotalHomeFTM += Convert.ToInt16(prediction.HomeFTM);
+                        optimizer.FirstTotalAwayPoints += Convert.ToInt16(prediction.AwayPoints);
+                        optimizer.FirstTotalAway3PA += Convert.ToInt16(prediction.Away3PA);
+                        optimizer.FirstTotalAway3PM += Convert.ToInt16(prediction.Away3PM);
+                        optimizer.FirstTotalAwayFGA += Convert.ToInt16(prediction.AwayFGA);
+                        optimizer.FirstTotalAwayFGM += Convert.ToInt16(prediction.AwayFGM);
+                        optimizer.FirstTotalAwayFTA += Convert.ToInt16(prediction.AwayFTA);
+                        optimizer.FirstTotalAwayFTM += Convert.ToInt16(prediction.AwayFTM);
                     }
                 }
             }

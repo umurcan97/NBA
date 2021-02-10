@@ -176,7 +176,7 @@ namespace NBA.Api.Entities
         {
             List<FullSeason> gameModels = this._dbContext.FullSeason.Where(x =>
                     (x.AwayTeam == team || x.HomeTeam == team))
-                .OrderByDescending(y => y.GameNo).ToList();
+                .OrderByDescending(y => y.GameDate).ToList();
             return gameModels;
         }
         public List<FullSeason> GetFullSeasonForHomeOrAwayList(Team team, bool isHome)
@@ -378,6 +378,13 @@ namespace NBA.Api.Entities
         {
             Players player = this._dbContext.Players.FirstOrDefault(x => x.Name == PlayerName);
             return GetLast5StatsWithPlayer(player);
+        }
+        public List<GameTime> GetFullSeasonGameTimePlayed(Team team)
+        {
+            DateTime time = DateTime.Now.AddHours(-8);
+            return this._dbContext.GameTime.Where(x =>
+                    (x.HomeTeam == team || x.AwayTeam == team) && x.GameDate < time)
+                .OrderByDescending(q => q.GameDate).ToList();
         }
     }
 }

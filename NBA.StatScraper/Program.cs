@@ -49,7 +49,7 @@ namespace NBA.StatScraper
             //    driver.FindElementByXPath("/html/body/div[2]/div[3]/div/div/div[2]/div/div/button").Click();
             //    foreach (var game in gamesPlayed)
             //    {
-            //        if (game.GameNo == 16 || game.GameNo == 145 || game.GameNo == 154 || game.GameNo == 160 || game.GameNo == 166 || game.GameNo == 167 || game.GameNo == 171 || game.GameNo == 179 || game.GameNo == 183 || game.GameNo == 185 || game.GameNo == 194 || game.GameNo == 197 || game.GameNo == 199 || game.GameNo == 204 || game.GameNo == 215 || game.GameNo == 225 || game.GameNo == 235 || game.GameNo == 240 || game.GameNo == 255 || game.GameNo == 263 || game.GameNo == 264 || game.GameNo == 278 || game.GameNo == 321)
+            //        if (game.GameNo == 16 || game.GameNo == 145 || game.GameNo == 154 || game.GameNo == 160 || game.GameNo == 166 || game.GameNo == 167 || game.GameNo == 171 || game.GameNo == 179 || game.GameNo == 183 || game.GameNo == 185 || game.GameNo == 194 || game.GameNo == 197 || game.GameNo == 199 || game.GameNo == 204 || game.GameNo == 215 || game.GameNo == 225 || game.GameNo == 235 || game.GameNo == 240 || game.GameNo == 255 || game.GameNo == 263 || game.GameNo == 264 || game.GameNo == 278 || game.GameNo == 321 || game.GameNo == 362)
             //            continue;
             //        if (_statScraper.DoesGameExist(game.GameNo))
             //            continue;
@@ -394,19 +394,19 @@ namespace NBA.StatScraper
             //    }
             //}
 
-            ////CoEfficientOptimizerGame
+            //CoEfficientOptimizerGame
 
-            //for (int i = 0; i < 1000; i++)
-            //{
-            //    _predictor.CoefficientOptimizerGame();
-            //}
+            for (int i = 0; i < 6561; i++)
+            {
+                _predictor.CoefficientOptimizerGame(i);
+            }
 
-            ////CoEfficientOptimizerQuarter
+            //CoEfficientOptimizerQuarter
 
-            //for (int i = 0; i < 1000; i++)
-            //{
-            //    _predictor.CoefficientOptimizerQuarter();
-            //}
+            for (int i = 0; i < 6561; i++)
+            {
+                _predictor.CoefficientOptimizerQuarter(i);
+            }
         }
     }
 }
