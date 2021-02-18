@@ -56,11 +56,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\GetStatMethods.cs" />
+    <Compile Include="Entities\OddCalculator.cs" />
     <Compile Include="Entities\Predictor.cs" />
     <Compile Include="Entities\Simulator.cs" />
     <Compile Include="Entities\StatCalculator.cs" />
     <Compile Include="Entities\StatScraper.cs" />
     <Compile Include="Interfaces\IGetStatMethods.cs" />
+    <Compile Include="Interfaces\IOddCalculator.cs" />
     <Compile Include="Interfaces\IPredictor.cs" />
     <Compile Include="Interfaces\ISimulator.cs" />
     <Compile Include="Interfaces\IStatCalculator.cs" />
