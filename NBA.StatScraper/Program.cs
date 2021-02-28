@@ -35,155 +35,142 @@ namespace NBA.StatScraper
             //QuarterPredictions quarter3 = _simulator.QuarterSimulator(Team.MemphisGrizzlies, Team.LosAngelesLakers, 3, 87);
             //QuarterPredictions quarter4 = _simulator.QuarterSimulator(Team.MemphisGrizzlies, Team.LosAngelesLakers, 4, 87);
 
-            ////FullStatScraper
+            //FullStatScraper
 
-            //List<GameTime> gamesPlayed = _statScraper.GetListOfGamesPlayed();
+            List<GameTime> gamesPlayed = _statScraper.GetListOfGamesPlayed();
 
 
-            //using (var driver = new ChromeDriver())
-            //{
+            using (var driver = new ChromeDriver())
+            {
 
-            //    driver.Manage().Window.Maximize();
-            //    driver.Navigate().GoToUrl("https://www.nba.com/schedule");
-            //    Thread.Sleep(2000);
-            //    driver.FindElementByXPath("/html/body/div[2]/div[3]/div/div/div[2]/div/div/button").Click();
-            //    foreach (var game in gamesPlayed)
-            //    {
-            //        if (game.GameNo == 16 || game.GameNo == 145 || game.GameNo == 154 || game.GameNo == 160 || game.GameNo == 166 || game.GameNo == 167 || game.GameNo == 171 || game.GameNo == 179 || game.GameNo == 183 || game.GameNo == 185 || game.GameNo == 194 || game.GameNo == 197 || game.GameNo == 199 || game.GameNo == 204 || game.GameNo == 215 || game.GameNo == 225 || game.GameNo == 235 || game.GameNo == 240 || game.GameNo == 255 || game.GameNo == 263 || game.GameNo == 264 || game.GameNo == 278 || game.GameNo == 321 || game.GameNo == 362 || game.GameNo == 428 || game.GameNo == 434 || game.GameNo == 435 || game.GameNo == 442 || game.GameNo == 448)
-            //            continue;
-            //        if (_statScraper.DoesGameExist(game.GameNo))
-            //            continue;
-            //        try
-            //        {
-            //            driver.Navigate().GoToUrl("https://www.nba.com/game/002200" + (game.GameNo).ToString("0000"));
-            //            FullSeason stat = _statScraper.GameScraper(driver, game.GameNo);
-            //            List<PlayerStats> stats = _statScraper.PlayerStatScraper(driver, game.GameNo);
-            //            List<FullSeasonQuarters> quarters = new List<FullSeasonQuarters>();
-            //            for (int l = 1; l < 5; l++)
-            //            {
-            //                FullSeasonQuarters quarter = _statScraper.QuarterScraper(driver, game.GameNo, l);
-            //                quarters.Add(quarter);
-            //            }
-            //            _statScraper.AddStatGame(stat);
-            //            _statScraper.AddPlayerStatList(stats);
-            //            foreach (var quarter in quarters)
-            //            {
-            //                if (quarter.HomePoints > 50 || quarter.HomePoints < 10 || quarter.AwayPoints > 50 ||
-            //                    quarter.AwayPoints < 10)
-            //                {
-            //                    return;
-            //                }
-            //                _statScraper.AddStatQuarter(quarter);
-            //            }
-            //        }
-            //        catch (Exception)
-            //        {
+                driver.Manage().Window.Maximize();
+                driver.Navigate().GoToUrl("https://www.nba.com/schedule");
+                Thread.Sleep(2000);
+                driver.FindElementByXPath("/html/body/div[2]/div[3]/div/div/div[2]/div/div/button").Click();
+                foreach (var game in gamesPlayed)
+                {
+                    if (game.GameNo == 523 || game.GameNo>1059)
+                        continue;
+                    if (_statScraper.DoesGameExist(game.GameNo))
+                        continue;
+                    try
+                    {
+                        driver.Navigate().GoToUrl("https://www.nba.com/game/002200" + (game.GameNo).ToString("0000"));
+                        FullSeason stat = _statScraper.GameScraper(driver, game.GameNo);
+                        List<PlayerStats> stats = _statScraper.PlayerStatScraper(driver, game.GameNo);
+                        List<FullSeasonQuarters> quarters = new List<FullSeasonQuarters>();
+                        for (int l = 1; l < 5; l++)
+                        {
+                            FullSeasonQuarters quarter = _statScraper.QuarterScraper(driver, game.GameNo, l);
+                            quarters.Add(quarter);
+                        }
+                        _statScraper.AddStatGame(stat);
+                        _statScraper.AddPlayerStatList(stats);
+                        foreach (var quarter in quarters)
+                        {
+                            if (quarter.HomePoints > 50 || quarter.HomePoints < 10 || quarter.AwayPoints > 50 ||
+                                quarter.AwayPoints < 10)
+                            {
+                                return;
+                            }
+                            _statScraper.AddStatQuarter(quarter);
+                        }
+                    }
+                    catch (Exception)
+                    {
 
-            //        }
-            //    }
-            //}
+                    }
+                }
+            }
 
-            ////Quarter Predictor
+            //Quarter Predictor
 
-            //List<GameTime> gamesToBePlayed = _statScraper.GetListOfGamesToBePlayed();
-            //foreach (var game in gamesToBePlayed)
-            //{
-            //    if (_statScraper.DoesQuarterPredictionExist(game.GameNo) || game.GameNo == 428 || game.GameNo == 434 || game.GameNo == 435 || game.GameNo == 442 || game.GameNo == 448)
-            //    {
-            //        continue;
-            //    }
-            //    for (int j = 1; j < 5; j++)
-            //    {
-            //        try
-            //        {
-            //            QuarterPredictions quarter = _simulator.QuarterSimulator(game.HomeTeam, game.AwayTeam, j, game.GameNo);
-            //            _statScraper.AddQuarterPrediction(quarter);
-            //        }
-            //        catch (Exception)
-            //        {
+            List<GameTime> gamesToBePlayed = _statScraper.GetListOfGamesToBePlayed();
+            foreach (var game in gamesToBePlayed)
+            {
+                if (_statScraper.DoesQuarterPredictionExist(game.GameNo) || game.GameNo == 523 || game.GameNo>1059)
+                {
+                    continue;
+                }
+                for (int j = 1; j < 5; j++)
+                {
+                    try
+                    {
+                        QuarterPredictions quarter = _simulator.QuarterSimulator(game.HomeTeam, game.AwayTeam, j, game.GameNo);
+                        _statScraper.AddQuarterPrediction(quarter);
+                    }
+                    catch (Exception)
+                    {
 
-            //        }
-            //    }
-            //}
+                    }
+                }
+            }
 
-            ////Game Predictor
+            //Game Predictor
 
-            //foreach (var game in gamesToBePlayed)
-            //{
-            //    if (_statScraper.DoesGamePredictionExist(game.GameNo) || game.GameNo == 428 || game.GameNo == 434 || game.GameNo == 435 || game.GameNo == 442 || game.GameNo == 448)
-            //    {
-            //        continue;
-            //    }
-            //    GamePredictions gamePrediction = _simulator.FullMatchSimulator(game.HomeTeam, game.AwayTeam, game.GameNo);
-            //    _statScraper.AddGamePrediction(gamePrediction);
-            //}
+            foreach (var game in gamesToBePlayed)
+            {
+                if (_statScraper.DoesGamePredictionExist(game.GameNo) || game.GameNo == 523 || game.GameNo > 1059)
+                {
+                    continue;
+                }
+                GamePredictions gamePrediction = _simulator.FullMatchSimulator(game.HomeTeam, game.AwayTeam, game.GameNo);
+                _statScraper.AddGamePrediction(gamePrediction);
+            }
 
             ////FullGame Date Scraper
 
-            //int i = 22;
-            //int k = 9;
-            //for (; i < 23; i++)
+            //int i = 0;
+            //int k = 1;
+            //for (; i < 11; i++)
             //{
             //    using (var driver = new ChromeDriver())
             //    {
-            //        for (; k < 25; k++)
+            //        driver.Manage().Window.Maximize();
+            //        driver.Navigate().GoToUrl("https://www.nba.com/schedule");
+            //        Thread.Sleep(2000);
+            //        driver.FindElementByXPath("/html/body/div[2]/div[3]/div/div/div[2]/div/div/button").Click();
+            //        for (; k < 100; k++)
             //        {
-            //            if (game.GameNo >= 563)
-            //                return;
-            //            try
+            //            if (_statScraper.DoesGameExist(i * 100 + k) && i * 100 + k < 513)
+            //                continue;
+            //            if (!_statScraper.DoesGameExist(i * 100 + k) && i * 100 + k < 513)
             //            {
-            //                GameTime time = _statScraper.DateScraper(driver, game.GameNo,
-            //                    "https://www.nba.com/game/002200" + (game.GameNo).ToString("0000"));
-            //                _statScraper.AddGameTime(time);
+            //                GameTime game = _getStatMethods.GetGameTime(i * 100 + k);
+            //                GameTime newgame = _statScraper.DateScraper(driver, i * 100 + k, "https://www.nba.com/game/002200" + (i * 100 + k).ToString("0000"));
+            //                game.GameDate = newgame.GameDate;
+            //                uw.Commit();
             //            }
-            //            catch (Exception)
+            //            else
             //            {
-            //                k--;
+            //                try
+            //                {
+            //                    GameTime game = _statScraper.DateScraper(driver, i * 100 + k,
+            //                        "https://www.nba.com/game/002200" + (i * 100 + k).ToString("0000"));
+            //                    string teams = driver
+            //                        .FindElementByXPath("/html/body/div[1]/div[2]/section/div[1]/div[5]/div/div[2]/h1")
+            //                        .Text;
+            //                    string away = teams.Substring(0, teams.IndexOf('@') - 1).ToUpper().Replace('İ','I');
+            //                    string home = teams.Substring(teams.IndexOf('@') + 2).ToUpper().Replace('İ', 'I');
+            //                    game.AwayTeam = _statScraper.GetTeamEnumByTeamMascotName(away);
+            //                    game.HomeTeam = _statScraper.GetTeamEnumByTeamMascotName(home);
+            //                    _statScraper.AddGameTime(game);
+            //                }
+            //                catch (Exception)
+            //                {
+            //                    k--;
+            //                }
             //            }
             //        }
             //    }
             //    k = 0;
             //}
 
-            ////Quarters
-
-            //List<GameTime> games = _statScraper.GetListOfGamesPlayed();
-
-            //using (var driver = new ChromeDriver())
-            //{
-            //    driver.Manage().Window.Maximize();
-            //    driver.Navigate().GoToUrl("https://www.nba.com/schedule");
-            //    Thread.Sleep(2000);
-            //    driver.FindElementByXPath("/html/body/div[2]/div[3]/div/div/div[2]/div/div/button").Click();
-            //    Thread.Sleep(1000);
-            //    foreach (var game in games)
-            //    {
-            //        if (_statScraper.DoesQuarterExist(game.GameNo))
-            //            continue;
-            //        if (game.GameNo == 16 || game.GameNo == 145 || game.GameNo == 154 || game.GameNo == 160 || game.GameNo == 166 || game.GameNo == 167 || game.GameNo == 171 || game.GameNo == 179 || game.GameNo == 183 || game.GameNo == 185 || game.GameNo == 194 || game.GameNo == 197 || game.GameNo == 199 || game.GameNo == 204 || game.GameNo == 215 || game.GameNo == 225 || game.GameNo == 235 || game.GameNo == 240 || game.GameNo == 255 || game.GameNo == 263 || game.GameNo == 264 || game.GameNo == 278 || game.GameNo == 321)
-            //            continue;
-            //        driver.Navigate().GoToUrl("https://www.nba.com/game/002200" + (game.GameNo).ToString("0000") + "/box-score");
-            //        List<FullSeasonQuarters> season = new List<FullSeasonQuarters>();
-            //        for (int l = 1; l < 5; l++)
-            //        {
-            //            try
-            //            {
-            //                
-            //            }
-            //            catch (Exception)
-            //            {
-            //                l--;
-            //            }
-            //        }
-
-            //    }
-            //}
-
             ////PlayerInfoScraper
             //using (var driver = new ChromeDriver())
             //{
             //    driver.Manage().Window.Maximize();
-            //    List<Players> players = _statScraper.PlayerInfoScraper(driver, 1, 508);
+            //    List<Players> players = _statScraper.PlayerInfoScraper(driver, 1, 511);
             //    _statScraper.AddPlayerInfoList(players);
             //}
 

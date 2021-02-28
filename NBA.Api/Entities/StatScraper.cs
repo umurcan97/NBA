@@ -386,11 +386,6 @@ namespace NBA.Api.Entities
         public GameTime DateScraper(ChromeDriver driver, int GameNo, string url)
         {
             driver.Navigate().GoToUrl(url);
-            if (GameNo % 25 == 0)
-            {
-                Thread.Sleep(3000);
-                driver.FindElementByXPath("/html/body/div[3]/div[3]/div/div/div[2]/div/div/button").Click();
-            }
             GameTime game = new GameTime();
             string date = "/html/body/div[1]/div[2]/section/div[1]/div[5]/div/div[2]/p[1]";
             game.GameDate = DateTimeConverter(driver.FindElementByXPath(date).Text);
@@ -2206,6 +2201,12 @@ namespace NBA.Api.Entities
         {
             DateTime date = DateTime.Now.AddHours(-8);
             List<GameTime> games = this._dbContext.GameTime.Where(x => x.GameDate < date).OrderBy(z=>z.GameDate).ToList();
+            return games;
+        }
+        public List<GameTime> GetListOfGamesPlayedTillTomorrow()
+        {
+            DateTime date = DateTime.Now.AddHours(16);
+            List<GameTime> games = this._dbContext.GameTime.Where(x=> x.GameDate < date).OrderBy(z => z.GameDate).ToList();
             return games;
         }
         public List<GameTime> GetListOfGamesToBePlayed()

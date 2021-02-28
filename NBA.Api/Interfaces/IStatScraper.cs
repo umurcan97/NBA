@@ -39,6 +39,7 @@ namespace NBA.Api.Interfaces
         List<PlayerStats> PlayerStatScraper(ChromeDriver driver, int GameNo);
         List<Players> PlayerInfoScraper(ChromeDriver driver, int No1, int No2);
         List<GameTime> GetListOfGamesPlayed();
+        List<GameTime> GetListOfGamesPlayedTillTomorrow();
         List<GameTime> GetListOfGamesToBePlayed();
     }
 }
