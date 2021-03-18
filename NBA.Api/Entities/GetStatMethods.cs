@@ -16,6 +16,8 @@ namespace NBA.Api.Entities
             this._dbContext = dbContext;
         }
 
+        #region ForScraper
+
         public string GetTeamNameByID(int TeamID)
         {
             Teams team = this._dbContext.Teams.Where(x => x.Id == TeamID + 1).First();
@@ -71,6 +73,11 @@ namespace NBA.Api.Entities
                 return 0;
             return stat.GameNo;
         }
+        public int GetNextGame(DateTime date)
+        {
+            GameTime game = this._dbContext.GameTime.Where(x => x.GameDate > date).FirstOrDefault();
+            return game.GameNo;
+        }
         public int GetLatestGameNoQuarterPredictions()
         {
             try
@@ -110,6 +117,11 @@ namespace NBA.Api.Entities
                 return false;
             return true;
         }
+
+        #endregion
+
+        #region SingleGets
+
         public Team GetHomeTeam(int GameNo)
         {
             var game = this._dbContext.FullSeason.First(x => x.GameNo == GameNo);
@@ -140,11 +152,6 @@ namespace NBA.Api.Entities
             GameTime game = this._dbContext.GameTime.FirstOrDefault(x => x.GameNo == GameNo);
             return game;
         }
-        public int GetNextGame(DateTime date)
-        {
-            GameTime game = this._dbContext.GameTime.Where(x => x.GameDate > date).FirstOrDefault();
-            return game.GameNo;
-        }
         public FullSeason GetFullSeason(int GameNo)
         {
             return _dbContext.FullSeason.First(x => x.GameNo == GameNo);
@@ -165,6 +172,11 @@ namespace NBA.Api.Entities
         {
             return this._dbContext.Players.FirstOrDefault(x => x.Name == name);
         }
+
+        #endregion
+
+        #region FullSeason
+
         public List<FullSeason> GetFullSeasonTillGameNo(Team team, int GameNo)
         {
             List<FullSeason> gameModels = this._dbContext.FullSeason.Where(x =>
@@ -209,6 +221,11 @@ namespace NBA.Api.Entities
                 .OrderByDescending(y => y.GameNo).ToList();
             return gameModels;
         }
+
+        #endregion
+
+        #region Quarters
+
         public List<FullSeasonQuarters> GetFullSeasonTillGameNoForQuarter(Team team, int GameNo, int QuarterNo)
         {
             List<FullSeasonQuarters> quarters = this._dbContext.FullSeasonQuarters.Where(x =>
@@ -256,6 +273,11 @@ namespace NBA.Api.Entities
                 .OrderByDescending(y => y.GameNo).ToList();
             return gameModels;
         }
+
+        #endregion
+
+        #region FullSeason1920
+
         public List<FullSeason19_20> GetFullSeason1920TillGameNo(Team team, int GameNo)
         {
             List<FullSeason19_20> gameModels = this._dbContext.FullSeason1920.Where(x =>
@@ -300,6 +322,11 @@ namespace NBA.Api.Entities
                 .OrderByDescending(y => y.GameNo).ToList();
             return gameModels;
         }
+
+        #endregion
+
+        #region Quarters1920
+
         public List<FullSeasonQuarters19_20> GetFullSeason1920TillGameNoForQuarter(Team team, int GameNo, int QuarterNo)
         {
             List<FullSeasonQuarters19_20> quarters = this._dbContext.FullSeasonQuarters1920.Where(x =>
@@ -347,6 +374,11 @@ namespace NBA.Api.Entities
                 .OrderByDescending(y => y.GameNo).ToList();
             return gameModels;
         }
+
+        #endregion
+
+        #region PlayerStats
+
         public List<PlayerStats> GetFullSeasonStatsWithPlayerID(int PlayerId)
         {
             List<PlayerStats> Stats = this._dbContext.PlayerStats.Where(x => x.ID == PlayerId).ToList();
@@ -379,12 +411,22 @@ namespace NBA.Api.Entities
             Players player = this._dbContext.Players.FirstOrDefault(x => x.Name == PlayerName);
             return GetLast5StatsWithPlayer(player);
         }
+
+        #endregion
         public List<GameTime> GetFullSeasonGameTimePlayed(Team team)
         {
             DateTime time = DateTime.Now.AddHours(-8);
             return this._dbContext.GameTime.Where(x =>
                     (x.HomeTeam == team || x.AwayTeam == team) && x.GameDate < time)
                 .OrderByDescending(q => q.GameDate).ToList();
+        }
+        public List<GamePredictions> GetAllGamePredictions()
+        {
+            return this._dbContext.GamePredictions.ToList();
+        }
+        public List<QuarterPredictions> GetAllQuarterPredictions()
+        {
+            return this._dbContext.QuarterPredictions.ToList();
         }
     }
 }

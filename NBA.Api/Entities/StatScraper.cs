@@ -165,7 +165,7 @@ namespace NBA.Api.Entities
                 case "MAGIC": return Team.OrlandoMagic;
                 case "76ERS": return Team.Philadelphia76ers;
                 case "SUNS": return Team.PhoenixSuns;
-                case "TRAILBLAZERS": return Team.PortlandTrailBlazers;
+                case "TRAIL BLAZERS": return Team.PortlandTrailBlazers;
                 case "KINGS": return Team.SacramentoKings;
                 case "SPURS": return Team.SanAntonioSpurs;
                 case "RAPTORS": return Team.TorontoRaptors;

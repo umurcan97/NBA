@@ -59,5 +59,7 @@ namespace NBA.Api.Interfaces
         List<PlayerStats> GetLast5StatsWithPlayer(Players Player);
         List<PlayerStats> GetLast5StatsWithPlayerName(string PlayerName);
         List<GameTime> GetFullSeasonGameTimePlayed(Team team);
+        List<GamePredictions> GetAllGamePredictions();
+        List<QuarterPredictions> GetAllQuarterPredictions();
     }
 }

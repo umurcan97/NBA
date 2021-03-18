@@ -4,6 +4,7 @@ using NBA.Model;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
@@ -35,6 +36,28 @@ namespace NBA.StatScraper
             //QuarterPredictions quarter3 = _simulator.QuarterSimulator(Team.MemphisGrizzlies, Team.LosAngelesLakers, 3, 87);
             //QuarterPredictions quarter4 = _simulator.QuarterSimulator(Team.MemphisGrizzlies, Team.LosAngelesLakers, 4, 87);
 
+            //for (int i = 100; i < 626; i++)
+            //{
+            //    while (!_statScraper.DoesGameExist(i) && (_statScraper.DoesGamePredictionExist(i) || _statScraper.DoesQuarterPredictionExist(i)))
+            //    {
+            //        try
+            //        {
+            //            GamePredictions game = db.GamePredictions.FirstOrDefault(x => x.GameNo == i);
+            //            List<QuarterPredictions> asd = db.QuarterPredictions.Where(z => z.GameNo == i).ToList();
+            //            db.GamePredictions.Remove(game);
+            //            foreach (var at in asd)
+            //            {
+            //                db.QuarterPredictions.Remove(at);
+            //            }
+            //            uw.Commit();
+            //        }
+            //        catch (Exception)
+            //        {
+                        
+            //        }
+            //    }
+            //}
+
             //FullStatScraper
 
             List<GameTime> gamesPlayed = _statScraper.GetListOfGamesPlayed();
@@ -49,7 +72,7 @@ namespace NBA.StatScraper
                 driver.FindElementByXPath("/html/body/div[2]/div[3]/div/div/div[2]/div/div/button").Click();
                 foreach (var game in gamesPlayed)
                 {
-                    if (game.GameNo == 523 || game.GameNo>1059)
+                    if (game.GameNo == 321 || game.GameNo == 523 || game.GameNo > 1059)
                         continue;
                     if (_statScraper.DoesGameExist(game.GameNo))
                         continue;
@@ -64,8 +87,6 @@ namespace NBA.StatScraper
                             FullSeasonQuarters quarter = _statScraper.QuarterScraper(driver, game.GameNo, l);
                             quarters.Add(quarter);
                         }
-                        _statScraper.AddStatGame(stat);
-                        _statScraper.AddPlayerStatList(stats);
                         foreach (var quarter in quarters)
                         {
                             if (quarter.HomePoints > 50 || quarter.HomePoints < 10 || quarter.AwayPoints > 50 ||
@@ -75,6 +96,8 @@ namespace NBA.StatScraper
                             }
                             _statScraper.AddStatQuarter(quarter);
                         }
+                        _statScraper.AddPlayerStatList(stats);
+                        _statScraper.AddStatGame(stat);
                     }
                     catch (Exception)
                     {
@@ -88,7 +111,7 @@ namespace NBA.StatScraper
             List<GameTime> gamesToBePlayed = _statScraper.GetListOfGamesToBePlayed();
             foreach (var game in gamesToBePlayed)
             {
-                if (_statScraper.DoesQuarterPredictionExist(game.GameNo) || game.GameNo == 523 || game.GameNo>1059)
+                if (_statScraper.DoesQuarterPredictionExist(game.GameNo) || game.GameNo == 523 || game.GameNo > 1059)
                 {
                     continue;
                 }
@@ -170,7 +193,7 @@ namespace NBA.StatScraper
             //using (var driver = new ChromeDriver())
             //{
             //    driver.Manage().Window.Maximize();
-            //    List<Players> players = _statScraper.PlayerInfoScraper(driver, 1, 511);
+            //    List<Players> players = _statScraper.PlayerInfoScraper(driver, 1, 514);
             //    _statScraper.AddPlayerInfoList(players);
             //}
 
